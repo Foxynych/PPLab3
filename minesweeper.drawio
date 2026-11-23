@@ -1,0 +1,184 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0" version="22.0.0">
+  <diagram id="minesweeper-uml" name="Minesweeper UML">
+    <mxGraphModel dx="1400" dy="1000" grid="1" gridSize="10" guides="1"
+                  tooltips="1" connect="1" arrows="1" fold="1" page="1"
+                  pageScale="1" pageWidth="1600" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ================= composition root ================= -->
+        <mxCell id="main" value="&lt;b&gt;main&lt;/b&gt;&lt;br/&gt;&lt;i&gt;«composition root»&lt;/i&gt;&lt;hr&gt;+ main(): None"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#e1d5e7;strokeColor=#9673a6;"
+                vertex="1" parent="1">
+          <mxGeometry x="680" y="60" width="240" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- ================= presentation ================= -->
+        <mxCell id="tkapp" value="&lt;b&gt;TkApp&lt;/b&gt;&lt;hr&gt;- service: GameService&lt;br/&gt;- current_game: Game&lt;hr&gt;+ __init__(service, root)&lt;br/&gt;+ _new_game()&lt;br/&gt;+ _continue_game()&lt;br/&gt;+ _list_games()&lt;br/&gt;+ _delete_game()&lt;br/&gt;+ _clear_all()&lt;br/&gt;+ _render()&lt;br/&gt;+ _on_left_click(ev)&lt;br/&gt;+ _on_right_click(ev)"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+                vertex="1" parent="1">
+          <mxGeometry x="1080" y="60" width="280" height="400" as="geometry"/>
+        </mxCell>
+
+        <!-- ================= application ================= -->
+        <mxCell id="service" value="&lt;b&gt;GameService&lt;/b&gt;&lt;hr&gt;- repository: GameRepository&lt;hr&gt;+ list_games(): list[Game]&lt;br/&gt;+ new_game(w, h, mines): Game&lt;br/&gt;+ get_game(id): Game&lt;br/&gt;+ reveal(id, x, y): Game&lt;br/&gt;+ flag(id, x, y): Game&lt;br/&gt;+ delete_game(id)&lt;br/&gt;+ clear_history()"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+                vertex="1" parent="1">
+          <mxGeometry x="680" y="260" width="280" height="260" as="geometry"/>
+        </mxCell>
+
+        <!-- ================= domain ================= -->
+        <mxCell id="cell" value="&lt;b&gt;Cell&lt;/b&gt;&lt;hr&gt;+ mine: bool&lt;br/&gt;+ revealed: bool&lt;br/&gt;+ flagged: bool&lt;br/&gt;+ adjacent_mines: int"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+                vertex="1" parent="1">
+          <mxGeometry x="60" y="60" width="200" height="140" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="board" value="&lt;b&gt;Board&lt;/b&gt;&lt;hr&gt;+ width: int&lt;br/&gt;+ height: int&lt;br/&gt;+ mines: int&lt;br/&gt;+ cells: list[list[Cell]]&lt;hr&gt;+ in_bounds(x, y): bool&lt;br/&gt;+ cell(x, y): Cell&lt;br/&gt;+ neighbors(x, y)&lt;br/&gt;+ reveal(x, y)&lt;br/&gt;+ toggle_flag(x, y)&lt;br/&gt;+ all_safe_revealed(): bool&lt;br/&gt;+ mines_revealed(): bool"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+                vertex="1" parent="1">
+          <mxGeometry x="60" y="240" width="200" height="260" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="game" value="&lt;b&gt;Game&lt;/b&gt;&lt;hr&gt;+ id: int&lt;br/&gt;+ board: Board&lt;br/&gt;+ status: str&lt;br/&gt;+ moves: int&lt;br/&gt;+ elapsed: int&lt;br/&gt;+ history: list[str]&lt;hr&gt;+ is_over: bool&lt;br/&gt;+ reveal(x, y)&lt;br/&gt;+ flag(x, y)"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+                vertex="1" parent="1">
+          <mxGeometry x="60" y="540" width="200" height="220" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="repo" value="&lt;b&gt;GameRepository&lt;/b&gt;&lt;br/&gt;&lt;i&gt;«interface»&lt;/i&gt;&lt;hr&gt;+ get_all(): list[Game]&lt;br/&gt;+ save_all(games): None"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#fff2cc;strokeColor=#d6b656;"
+                vertex="1" parent="1">
+          <mxGeometry x="60" y="800" width="200" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- exceptions -->
+        <mxCell id="ms_error" value="&lt;b&gt;MinesweeperError&lt;/b&gt;&lt;br/&gt;&lt;i&gt;«exception»&lt;/i&gt;"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#f8cecc;strokeColor=#b85450;"
+                vertex="1" parent="1">
+          <mxGeometry x="60" y="960" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="invalid_size" value="InvalidBoardSizeError"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#f8cecc;strokeColor=#b85450;"
+                vertex="1" parent="1">
+          <mxGeometry x="60" y="1060" width="200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="oob" value="CellOutOfBoundsError"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#f8cecc;strokeColor=#b85450;"
+                vertex="1" parent="1">
+          <mxGeometry x="60" y="1150" width="200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="already" value="AlreadyRevealedError"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#f8cecc;strokeColor=#b85450;"
+                vertex="1" parent="1">
+          <mxGeometry x="60" y="1240" width="200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="over" value="GameOverError"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#f8cecc;strokeColor=#b85450;"
+                vertex="1" parent="1">
+          <mxGeometry x="60" y="1330" width="200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="valueerror" value="ValueError&lt;br/&gt;&lt;i&gt;«builtin»&lt;/i&gt;"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;"
+                vertex="1" parent="1">
+          <mxGeometry x="380" y="1060" width="180" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- ================= infrastructure ================= -->
+        <mxCell id="json_repo" value="&lt;b&gt;JsonGameRepository&lt;/b&gt;&lt;hr&gt;- path: Path&lt;hr&gt;+ __init__(path: Path)&lt;br/&gt;+ get_all(): list[Game]&lt;br/&gt;+ save_all(games): None&lt;br/&gt;- _game_from_dict(d): Game&lt;br/&gt;- _game_to_dict(g): dict"
+                style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#d5e8d4;strokeColor=#82b366;"
+                vertex="1" parent="1">
+          <mxGeometry x="380" y="800" width="240" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- ================= edges ================= -->
+
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;"
+                edge="1" parent="1" source="tkapp" target="service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=0;endArrow=none;"
+                edge="1" parent="1" source="service" target="repo">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;"
+                edge="1" parent="1" source="service" target="game">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;"
+                edge="1" parent="1" source="service" target="board">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=block;endFill=0;"
+                edge="1" parent="1" source="json_repo" target="repo">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;"
+                edge="1" parent="1" source="main" target="tkapp">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;"
+                edge="1" parent="1" source="main" target="service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;"
+                edge="1" parent="1" source="main" target="json_repo">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=none;"
+                edge="1" parent="1" source="game" target="board">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=none;"
+                edge="1" parent="1" source="board" target="cell">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;"
+                edge="1" parent="1" source="invalid_size" target="ms_error">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;"
+                edge="1" parent="1" source="oob" target="ms_error">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;"
+                edge="1" parent="1" source="already" target="ms_error">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;"
+                edge="1" parent="1" source="over" target="ms_error">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;"
+                edge="1" parent="1" source="invalid_size" target="valueerror">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;"
+                edge="1" parent="1" source="tkapp" target="ms_error">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;"
+                edge="1" parent="1" source="service" target="invalid_size">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;"
+                edge="1" parent="1" source="service" target="over">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
