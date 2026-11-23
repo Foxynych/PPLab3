@@ -7,7 +7,6 @@ from presentation.console import TkApp
 
 
 def main() -> None:
-    # Composition root: связываем слои, presentation получает сервис.
     repository = JsonGameRepository(Path(__file__).parent / "saves.json")
     service = GameService(repository)
 
@@ -18,3 +17,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    

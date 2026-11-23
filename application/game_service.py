@@ -29,6 +29,7 @@ class GameService:
         for game in self.repository.get_all():
             if game.id == game_id:
                 return game
+            
         raise InvalidBoardSizeError(f"Партия с ID {game_id} не найдена")
 
     def reveal(self, game_id: int, x: int, y: int) -> Game:
@@ -48,12 +49,11 @@ class GameService:
         remaining = [g for g in games if g.id != game_id]
         if len(remaining) == len(games):
             raise InvalidBoardSizeError(f"Партия с ID {game_id} не найдена")
+        
         self.repository.save_all(remaining)
 
     def clear_history(self) -> None:
         self.repository.save_all([])
-
-    # --- внутренние ------------------------------------------------------
 
     def _save(self, updated: Game) -> None:
         games = self.repository.get_all()

@@ -8,10 +8,10 @@ from domain.errors import AlreadyRevealedError, GameOverError
 class Game:
     id: int
     board: Board
-    status: str = "playing"        # "playing" | "won" | "lost"
+    status: str = "playing"
     moves: int = 0
-    elapsed: int = 0               # секунды, выставляет UI
-    history: list[str] = field(default_factory=list)  # последние ходы
+    elapsed: int = 0
+    history: list[str] = field(default_factory=list)
 
     @property
     def is_over(self) -> bool:
@@ -20,9 +20,11 @@ class Game:
     def reveal(self, x: int, y: int) -> None:
         if self.is_over:
             raise GameOverError("Игра завершена")
+        
         cell = self.board.cell(x, y)
         if cell.revealed:
             raise AlreadyRevealedError(f"Клетка ({x}, {y}) уже открыта")
+        
         self.board.reveal(x, y)
         self.moves += 1
         self.history.append(f"reveal {x},{y}")
@@ -31,6 +33,7 @@ class Game:
     def flag(self, x: int, y: int) -> None:
         if self.is_over:
             raise GameOverError("Игра завершена")
+        
         self.board.toggle_flag(x, y)
         self.moves += 1
         self.history.append(f"flag {x},{y}")

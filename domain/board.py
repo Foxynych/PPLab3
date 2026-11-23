@@ -23,6 +23,7 @@ class Board:
             raise InvalidBoardSizeError(
                 f"Число мин должно быть от 1 до {width * height - 1}"
             )
+        
         self.width = width
         self.height = height
         self.mines = mines
@@ -30,21 +31,19 @@ class Board:
             cells if cells is not None else self._generate_cells()
         )
 
-    # --- генерация -------------------------------------------------------
-
     def _generate_cells(self) -> list[list[Cell]]:
         flat = [Cell() for _ in range(self.width * self.height)]
         for i in random.sample(range(len(flat)), self.mines):
             flat[i].mine = True
+
         grid = [flat[r * self.width:(r + 1) * self.width] for r in range(self.height)]
         for y in range(self.height):
             for x in range(self.width):
                 grid[y][x]._adjacent = sum(
                     1 for nx, ny in self.neighbors(x, y) if grid[ny][nx].mine
                 )
-        return grid
 
-    # --- доступ ----------------------------------------------------------
+        return grid
 
     def in_bounds(self, x: int, y: int) -> bool:
         return 0 <= x < self.width and 0 <= y < self.height
@@ -52,6 +51,7 @@ class Board:
     def cell(self, x: int, y: int) -> Cell:
         if not self.in_bounds(x, y):
             raise CellOutOfBoundsError(f"Координаты ({x}, {y}) вне поля")
+        
         return self.cells[y][x]
 
     def neighbors(self, x: int, y: int):
@@ -59,21 +59,20 @@ class Board:
             for dx in (-1, 0, 1):
                 if dx == 0 and dy == 0:
                     continue
+
                 nx, ny = x + dx, y + dy
                 if self.in_bounds(nx, ny):
                     yield nx, ny
 
-    # --- состояние -------------------------------------------------------
-
     def reveal(self, x: int, y: int) -> None:
-        """Открывает клетку. На мину — просто помечает её; Game решит, что это Game Over."""
         cell = self.cell(x, y)
         if cell.revealed or cell.flagged:
             return
+        
         cell.revealed = True
         if cell.mine or cell.adjacent_mines > 0:
             return
-        # flood fill по нулевым клеткам
+        
         for nx, ny in self.neighbors(x, y):
             self.reveal(nx, ny)
 
@@ -81,6 +80,7 @@ class Board:
         cell = self.cell(x, y)
         if cell.revealed:
             return
+        
         cell.flagged = not cell.flagged
 
     def all_safe_revealed(self) -> bool:

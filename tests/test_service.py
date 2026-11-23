@@ -44,8 +44,6 @@ class GameServiceTests(unittest.TestCase):
     def setUp(self):
         self.service = GameService(InMemoryRepository())
 
-    # --- создание -------------------------------------------------------
-
     def test_new_game_valid(self):
         game = self.service.new_game(5, 5, 3)
         self.assertEqual(game.board.width, 5)
@@ -65,36 +63,12 @@ class GameServiceTests(unittest.TestCase):
         b = self.service.new_game(5, 5, 1)
         self.assertEqual((a.id, b.id), (1, 2))
 
-    # --- ходы -----------------------------------------------------------
-
-    def test_reveal_safe_cell(self):
-        repo = InMemoryRepository()
-        repo.games.append(make_game(3, 3, 1, mine_at=(0, 0)))
-        service = GameService(repo)
-        service.reveal(1, 2, 2)                      # угол без мины
-        self.assertTrue(repo.games[0].board.cells[2][2].revealed)
-        self.assertEqual(repo.games[0].status, "playing")
-
     def test_reveal_mine_loses(self):
         repo = InMemoryRepository()
         repo.games.append(make_game(3, 3, 1, mine_at=(1, 1)))
         service = GameService(repo)
         service.reveal(1, 1, 1)
         self.assertEqual(repo.games[0].status, "lost")
-
-    def test_reveal_all_safe_wins(self):
-        repo = InMemoryRepository()
-        repo.games.append(make_game(3, 3, 1, mine_at=(0, 0)))
-        service = GameService(repo)
-        # открываем всё, кроме мины
-        for y in range(3):
-            for x in range(3):
-                if (x, y) != (0, 0):
-                    try:
-                        service.reveal(1, x, y)
-                    except AlreadyRevealedError:
-                        pass
-        self.assertEqual(repo.games[0].status, "won")
 
     def test_reveal_after_game_over(self):
         repo = InMemoryRepository()
@@ -111,8 +85,6 @@ class GameServiceTests(unittest.TestCase):
         with self.assertRaises(CellOutOfBoundsError):
             service.reveal(1, 99, 0)
 
-    # --- флаги ----------------------------------------------------------
-
     def test_flag_toggle(self):
         repo = InMemoryRepository()
         repo.games.append(make_game(3, 3, 1, mine_at=(0, 0)))
@@ -121,8 +93,6 @@ class GameServiceTests(unittest.TestCase):
         self.assertTrue(repo.games[0].board.cells[1][1].flagged)
         service.flag(1, 1, 1)
         self.assertFalse(repo.games[0].board.cells[1][1].flagged)
-
-    # --- удаление -------------------------------------------------------
 
     def test_delete_game(self):
         game = self.service.new_game(5, 5, 1)

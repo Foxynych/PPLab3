@@ -21,8 +21,6 @@ COLOR_MINE     = "#c62828"
 
 
 class TkApp:
-    """GUI на Tkinter. Никаких бизнес-правил и работы с JSON."""
-
     def __init__(self, service: GameService, root: tk.Tk):
         self.service = service
         self.root = root
@@ -36,10 +34,9 @@ class TkApp:
         self._build_menu()
         self.menu_frame.pack()
 
-    # ───────────────────────────── МЕНЮ ─────────────────────────────
-
     def _build_menu(self) -> None:
         f = self.menu_frame
+
         tk.Label(f, text="САПЁР", font=("TkDefaultFont", 22, "bold")).pack(pady=(0, 16))
         for text, cmd in (
             ("Новая игра",           self._new_game),
@@ -54,10 +51,9 @@ class TkApp:
     def _show_menu(self) -> None:
         for child in self.game_frame.winfo_children():
             child.destroy()
+
         self.game_frame.pack_forget()
         self.menu_frame.pack()
-
-    # ──────────────────────── ПУНКТЫ МЕНЮ ───────────────────────────
 
     def _new_game(self) -> None:
         w = simpledialog.askinteger("Новая игра", "Ширина (3..50):",
@@ -73,17 +69,20 @@ class TkApp:
                                     initialvalue=max(1, w * h // 6))
         if m is None:
             return
+        
         try:
             game = self.service.new_game(w, h, m)
         except MinesweeperError as error:
             messagebox.showerror("Ошибка", str(error))
             return
+        
         self._open_game(game)
 
     def _continue_game(self) -> None:
         game_id = self._pick_game_id("Продолжить игру")
         if game_id is None:
             return
+        
         try:
             self._open_game(self.service.get_game(game_id))
         except MinesweeperError as error:
@@ -94,6 +93,7 @@ class TkApp:
         if not games:
             messagebox.showinfo("Партии", "Сохранённых партий нет.")
             return
+        
         text = "\n".join(
             f"#{g.id}  [{g.status:7}]  {g.board.width}x{g.board.height}  "
             f"мин: {g.board.mines}  ходов: {g.moves}"
@@ -105,6 +105,7 @@ class TkApp:
         game_id = self._pick_game_id("Удалить партию")
         if game_id is None:
             return
+        
         try:
             self.service.delete_game(game_id)
             messagebox.showinfo("Готово", f"Партия #{game_id} удалена.")
@@ -115,8 +116,6 @@ class TkApp:
         if messagebox.askyesno("Очистить", "Удалить все сохранённые партии?"):
             self.service.clear_history()
             messagebox.showinfo("Готово", "История очищена.")
-
-    # ────────────────────────── ЭКРАН ИГРЫ ──────────────────────────
 
     def _open_game(self, game) -> None:
         self.current_game = game
@@ -189,8 +188,6 @@ class TkApp:
             self.canvas.create_text(x1 + CELL_SIZE / 2, y1 + CELL_SIZE / 2,
                                     text=text, fill=color, font=FONT_CELL)
 
-    # ────────────────────────── ОБРАБОТКА ───────────────────────────
-
     def _on_left_click(self, event) -> None:
         self._do_move(self._reveal, event)
 
@@ -201,7 +198,9 @@ class TkApp:
         game = self.current_game
         if game is None or game.is_over:
             return
+        
         x, y = event.x // CELL_SIZE, event.y // CELL_SIZE
+
         try:
             self.current_game = action(game.id, x, y)
             self._render()
@@ -226,11 +225,8 @@ class TkApp:
             self._show_menu()
 
     def _flash_error(self, message: str) -> None:
-        # Неверный ход (уже открыто/вне поля) — не диалог, чтобы не мешать игре.
         self.status_label.config(text=f"⚠ {message}")
         self.root.after(1500, self._render)
-
-    # ────────────────────────── ДИАЛОГИ ─────────────────────────────
 
     def _pick_game_id(self, title: str) -> int | None:
         games = self.service.list_games()

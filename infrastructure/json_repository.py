@@ -13,8 +13,6 @@ class JsonGameRepository(GameRepository):
     def __init__(self, path: Path):
         self.path = path
 
-    # --- чтение ----------------------------------------------------------
-
     def get_all(self) -> list[Game]:
         if not self.path.exists():
             return []
@@ -48,8 +46,6 @@ class JsonGameRepository(GameRepository):
             elapsed=item["elapsed"],
             history=list(item["history"]),
         )
-
-    # --- запись ----------------------------------------------------------
 
     def save_all(self, games: list[Game]) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
